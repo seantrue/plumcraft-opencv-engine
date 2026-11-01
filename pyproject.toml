@@ -1,0 +1,43 @@
+[project]
+name = "opencv-engine"
+version = "0.1.0"
+description = "OpenCV: a PlumCraft engine"
+requires-python = ">=3.12"
+dependencies = ["plumcraft-engine", "opencv-python-headless==4.14.0.94"]
+
+[project.scripts]
+opencv-engine = "opencv_engine.__main__:main"
+
+[dependency-groups]
+dev = ["pytest>=8", "ruff>=0.6"]
+
+# Where the PlumCraft SDK comes from; README.md says how to switch.
+[tool.uv.sources]
+plumcraft-engine = { path = "../plumcraft/python", editable = true }
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/opencv_engine"]
+
+[tool.ruff]
+line-length = 160
+src = ["src"]
+target-version = "py312"
+
+[tool.ruff.lint]
+select = ["E", "F", "W", "I", "B", "UP"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["src"]
+
+# What `plumcraft-engine nodes`, `run` and `check` use here.
+[tool.plumcraft]
+engine = "opencv_engine:OpencvEngine"
+demo = "examples/demo.json"
+
+[tool.plumcraft.conformance]
+slow = "opencv.slow"

@@ -1,0 +1,843 @@
+{
+  "version": 1,
+  "nodes": {
+    "source": {
+      "kind": "opencv.test_picture"
+    },
+    "encoded": {
+      "kind": "opencv.encode_image"
+    },
+    "decoded": {
+      "kind": "opencv.decode_image"
+    },
+    "grey": {
+      "kind": "opencv.to_grey"
+    },
+    "even": {
+      "kind": "opencv.equalize"
+    },
+    "mask": {
+      "kind": "opencv.threshold",
+      "values": {
+        "method": "otsu"
+      }
+    },
+    "tidy": {
+      "kind": "opencv.morphology",
+      "values": {
+        "operation": "open"
+      }
+    },
+    "local": {
+      "kind": "opencv.adaptive_threshold"
+    },
+    "edges": {
+      "kind": "opencv.canny"
+    },
+    "hsv": {
+      "kind": "opencv.to_space"
+    },
+    "back": {
+      "kind": "opencv.from_space"
+    },
+    "channels": {
+      "kind": "opencv.split"
+    },
+    "merged": {
+      "kind": "opencv.merge"
+    },
+    "blur": {
+      "kind": "opencv.gaussian_blur"
+    },
+    "median": {
+      "kind": "opencv.median_blur"
+    },
+    "smooth": {
+      "kind": "opencv.bilateral"
+    },
+    "laplace": {
+      "kind": "opencv.laplacian"
+    },
+    "gradient": {
+      "kind": "opencv.sobel"
+    },
+    "small": {
+      "kind": "opencv.resize"
+    },
+    "turned": {
+      "kind": "opencv.rotate"
+    },
+    "flipped": {
+      "kind": "opencv.flip"
+    },
+    "half": {
+      "kind": "opencv.pyramid_down"
+    },
+    "double": {
+      "kind": "opencv.pyramid_up"
+    },
+    "waited": {
+      "kind": "opencv.slow"
+    },
+    "stretched": {
+      "kind": "opencv.normalize"
+    },
+    "punchy": {
+      "kind": "opencv.convert_scale"
+    },
+    "local_contrast": {
+      "kind": "opencv.clahe"
+    },
+    "yellow": {
+      "kind": "opencv.in_range",
+      "values": {
+        "low1": 40,
+        "high1": 70,
+        "low2": 0.3,
+        "high2": 1,
+        "low3": 0.5,
+        "high3": 1
+      }
+    },
+    "box": {
+      "kind": "opencv.box_filter"
+    },
+    "sharp": {
+      "kind": "opencv.filter_2d"
+    },
+    "scharr_x": {
+      "kind": "opencv.scharr"
+    },
+    "lines": {
+      "kind": "opencv.hough_lines",
+      "values": {
+        "votes": 20,
+        "min_length": 10
+      }
+    },
+    "drawn_lines": {
+      "kind": "opencv.draw_segments"
+    },
+    "outlines": {
+      "kind": "opencv.find_contours"
+    },
+    "drawn_outlines": {
+      "kind": "opencv.draw_contours"
+    },
+    "corners": {
+      "kind": "opencv.good_features"
+    },
+    "drawn_corners": {
+      "kind": "opencv.draw_points"
+    },
+    "keypoints": {
+      "kind": "opencv.orb_keypoints"
+    },
+    "element": {
+      "kind": "opencv.structuring_element"
+    },
+    "distance": {
+      "kind": "opencv.distance_transform"
+    },
+    "shapes": {
+      "kind": "opencv.connected_components"
+    },
+    "cropped": {
+      "kind": "opencv.crop"
+    },
+    "warped": {
+      "kind": "opencv.warp_affine"
+    },
+    "styled": {
+      "kind": "opencv.stylization"
+    },
+    "sketch": {
+      "kind": "opencv.pencil_sketch"
+    },
+    "detail": {
+      "kind": "opencv.detail_enhance"
+    },
+    "edge_kept": {
+      "kind": "opencv.edge_preserving"
+    },
+    "filled": {
+      "kind": "opencv.inpaint"
+    },
+    "clean": {
+      "kind": "opencv.denoise"
+    },
+    "toon": {
+      "kind": "opencv.cartoon"
+    },
+    "few_colours": {
+      "kind": "opencv.kmeans_colours"
+    },
+    "basins": {
+      "kind": "opencv.watershed"
+    },
+    "subject": {
+      "kind": "opencv.grab_cut"
+    },
+    "mixed": {
+      "kind": "opencv.add_weighted"
+    },
+    "difference": {
+      "kind": "opencv.abs_diff"
+    },
+    "masked": {
+      "kind": "opencv.bitwise"
+    }
+  },
+  "wires": [
+    {
+      "from": {
+        "node": "source",
+        "port": "array"
+      },
+      "to": {
+        "node": "encoded",
+        "port": "picture"
+      }
+    },
+    {
+      "from": {
+        "node": "encoded",
+        "port": "image"
+      },
+      "to": {
+        "node": "decoded",
+        "port": "encoded"
+      }
+    },
+    {
+      "from": {
+        "node": "source",
+        "port": "array"
+      },
+      "to": {
+        "node": "grey",
+        "port": "picture"
+      }
+    },
+    {
+      "from": {
+        "node": "grey",
+        "port": "array"
+      },
+      "to": {
+        "node": "even",
+        "port": "picture"
+      }
+    },
+    {
+      "from": {
+        "node": "even",
+        "port": "array"
+      },
+      "to": {
+        "node": "mask",
+        "port": "picture"
+      }
+    },
+    {
+      "from": {
+        "node": "mask",
+        "port": "array"
+      },
+      "to": {
+        "node": "tidy",
+        "port": "picture"
+      }
+    },
+    {
+      "from": {
+        "node": "grey",
+        "port": "array"
+      },
+      "to": {
+        "node": "local",
+        "port": "picture"
+      }
+    },
+    {
+      "from": {
+        "node": "source",
+        "port": "array"
+      },
+      "to": {
+        "node": "edges",
+        "port": "picture"
+      }
+    },
+    {
+      "from": {
+        "node": "source",
+        "port": "array"
+      },
+      "to": {
+        "node": "hsv",
+        "port": "picture"
+      }
+    },
+    {
+      "from": {
+        "node": "hsv",
+        "port": "array"
+      },
+      "to": {
+        "node": "back",
+        "port": "picture"
+      }
+    },
+    {
+      "from": {
+        "node": "source",
+        "port": "array"
+      },
+      "to": {
+        "node": "channels",
+        "port": "picture"
+      }
+    },
+    {
+      "from": {
+        "node": "channels",
+        "port": "c1"
+      },
+      "to": {
+        "node": "merged",
+        "port": "c1"
+      }
+    },
+    {
+      "from": {
+        "node": "channels",
+        "port": "c2"
+      },
+      "to": {
+        "node": "merged",
+        "port": "c2"
+      }
+    },
+    {
+      "from": {
+        "node": "channels",
+        "port": "c3"
+      },
+      "to": {
+        "node": "merged",
+        "port": "c3"
+      }
+    },
+    {
+      "from": {
+        "node": "source",
+        "port": "array"
+      },
+      "to": {
+        "node": "blur",
+        "port": "picture"
+      }
+    },
+    {
+      "from": {
+        "node": "source",
+        "port": "array"
+      },
+      "to": {
+        "node": "median",
+        "port": "picture"
+      }
+    },
+    {
+      "from": {
+        "node": "source",
+        "port": "array"
+      },
+      "to": {
+        "node": "smooth",
+        "port": "picture"
+      }
+    },
+    {
+      "from": {
+        "node": "grey",
+        "port": "array"
+      },
+      "to": {
+        "node": "laplace",
+        "port": "picture"
+      }
+    },
+    {
+      "from": {
+        "node": "grey",
+        "port": "array"
+      },
+      "to": {
+        "node": "gradient",
+        "port": "picture"
+      }
+    },
+    {
+      "from": {
+        "node": "source",
+        "port": "array"
+      },
+      "to": {
+        "node": "small",
+        "port": "picture"
+      }
+    },
+    {
+      "from": {
+        "node": "small",
+        "port": "array"
+      },
+      "to": {
+        "node": "turned",
+        "port": "picture"
+      }
+    },
+    {
+      "from": {
+        "node": "turned",
+        "port": "array"
+      },
+      "to": {
+        "node": "flipped",
+        "port": "picture"
+      }
+    },
+    {
+      "from": {
+        "node": "source",
+        "port": "array"
+      },
+      "to": {
+        "node": "half",
+        "port": "picture"
+      }
+    },
+    {
+      "from": {
+        "node": "half",
+        "port": "array"
+      },
+      "to": {
+        "node": "double",
+        "port": "picture"
+      }
+    },
+    {
+      "from": {
+        "node": "flipped",
+        "port": "array"
+      },
+      "to": {
+        "node": "waited",
+        "port": "array"
+      }
+    },
+    {
+      "from": {
+        "node": "source",
+        "port": "array"
+      },
+      "to": {
+        "node": "stretched",
+        "port": "picture"
+      }
+    },
+    {
+      "from": {
+        "node": "source",
+        "port": "array"
+      },
+      "to": {
+        "node": "punchy",
+        "port": "picture"
+      }
+    },
+    {
+      "from": {
+        "node": "source",
+        "port": "array"
+      },
+      "to": {
+        "node": "local_contrast",
+        "port": "picture"
+      }
+    },
+    {
+      "from": {
+        "node": "hsv",
+        "port": "array"
+      },
+      "to": {
+        "node": "yellow",
+        "port": "picture"
+      }
+    },
+    {
+      "from": {
+        "node": "source",
+        "port": "array"
+      },
+      "to": {
+        "node": "box",
+        "port": "picture"
+      }
+    },
+    {
+      "from": {
+        "node": "source",
+        "port": "array"
+      },
+      "to": {
+        "node": "sharp",
+        "port": "picture"
+      }
+    },
+    {
+      "from": {
+        "node": "grey",
+        "port": "array"
+      },
+      "to": {
+        "node": "scharr_x",
+        "port": "picture"
+      }
+    },
+    {
+      "from": {
+        "node": "edges",
+        "port": "array"
+      },
+      "to": {
+        "node": "lines",
+        "port": "edges"
+      }
+    },
+    {
+      "from": {
+        "node": "source",
+        "port": "array"
+      },
+      "to": {
+        "node": "drawn_lines",
+        "port": "picture"
+      }
+    },
+    {
+      "from": {
+        "node": "lines",
+        "port": "table"
+      },
+      "to": {
+        "node": "drawn_lines",
+        "port": "segments"
+      }
+    },
+    {
+      "from": {
+        "node": "tidy",
+        "port": "array"
+      },
+      "to": {
+        "node": "outlines",
+        "port": "mask"
+      }
+    },
+    {
+      "from": {
+        "node": "source",
+        "port": "array"
+      },
+      "to": {
+        "node": "drawn_outlines",
+        "port": "picture"
+      }
+    },
+    {
+      "from": {
+        "node": "outlines",
+        "port": "table"
+      },
+      "to": {
+        "node": "drawn_outlines",
+        "port": "contours"
+      }
+    },
+    {
+      "from": {
+        "node": "source",
+        "port": "array"
+      },
+      "to": {
+        "node": "corners",
+        "port": "picture"
+      }
+    },
+    {
+      "from": {
+        "node": "source",
+        "port": "array"
+      },
+      "to": {
+        "node": "drawn_corners",
+        "port": "picture"
+      }
+    },
+    {
+      "from": {
+        "node": "corners",
+        "port": "table"
+      },
+      "to": {
+        "node": "drawn_corners",
+        "port": "points"
+      }
+    },
+    {
+      "from": {
+        "node": "source",
+        "port": "array"
+      },
+      "to": {
+        "node": "keypoints",
+        "port": "picture"
+      }
+    },
+    {
+      "from": {
+        "node": "tidy",
+        "port": "array"
+      },
+      "to": {
+        "node": "distance",
+        "port": "mask"
+      }
+    },
+    {
+      "from": {
+        "node": "tidy",
+        "port": "array"
+      },
+      "to": {
+        "node": "shapes",
+        "port": "mask"
+      }
+    },
+    {
+      "from": {
+        "node": "source",
+        "port": "array"
+      },
+      "to": {
+        "node": "cropped",
+        "port": "picture"
+      }
+    },
+    {
+      "from": {
+        "node": "source",
+        "port": "array"
+      },
+      "to": {
+        "node": "warped",
+        "port": "picture"
+      }
+    },
+    {
+      "from": {
+        "node": "small",
+        "port": "array"
+      },
+      "to": {
+        "node": "styled",
+        "port": "picture"
+      }
+    },
+    {
+      "from": {
+        "node": "small",
+        "port": "array"
+      },
+      "to": {
+        "node": "sketch",
+        "port": "picture"
+      }
+    },
+    {
+      "from": {
+        "node": "small",
+        "port": "array"
+      },
+      "to": {
+        "node": "detail",
+        "port": "picture"
+      }
+    },
+    {
+      "from": {
+        "node": "small",
+        "port": "array"
+      },
+      "to": {
+        "node": "edge_kept",
+        "port": "picture"
+      }
+    },
+    {
+      "from": {
+        "node": "source",
+        "port": "array"
+      },
+      "to": {
+        "node": "filled",
+        "port": "picture"
+      }
+    },
+    {
+      "from": {
+        "node": "yellow",
+        "port": "array"
+      },
+      "to": {
+        "node": "filled",
+        "port": "mask"
+      }
+    },
+    {
+      "from": {
+        "node": "small",
+        "port": "array"
+      },
+      "to": {
+        "node": "clean",
+        "port": "picture"
+      }
+    },
+    {
+      "from": {
+        "node": "source",
+        "port": "array"
+      },
+      "to": {
+        "node": "toon",
+        "port": "picture"
+      }
+    },
+    {
+      "from": {
+        "node": "small",
+        "port": "array"
+      },
+      "to": {
+        "node": "few_colours",
+        "port": "picture"
+      }
+    },
+    {
+      "from": {
+        "node": "source",
+        "port": "array"
+      },
+      "to": {
+        "node": "basins",
+        "port": "picture"
+      }
+    },
+    {
+      "from": {
+        "node": "shapes",
+        "port": "labels"
+      },
+      "to": {
+        "node": "basins",
+        "port": "markers"
+      }
+    },
+    {
+      "from": {
+        "node": "small",
+        "port": "array"
+      },
+      "to": {
+        "node": "subject",
+        "port": "picture"
+      }
+    },
+    {
+      "from": {
+        "node": "source",
+        "port": "array"
+      },
+      "to": {
+        "node": "mixed",
+        "port": "a"
+      }
+    },
+    {
+      "from": {
+        "node": "blur",
+        "port": "array"
+      },
+      "to": {
+        "node": "mixed",
+        "port": "b"
+      }
+    },
+    {
+      "from": {
+        "node": "source",
+        "port": "array"
+      },
+      "to": {
+        "node": "difference",
+        "port": "a"
+      }
+    },
+    {
+      "from": {
+        "node": "blur",
+        "port": "array"
+      },
+      "to": {
+        "node": "difference",
+        "port": "b"
+      }
+    },
+    {
+      "from": {
+        "node": "source",
+        "port": "array"
+      },
+      "to": {
+        "node": "masked",
+        "port": "a"
+      }
+    },
+    {
+      "from": {
+        "node": "source",
+        "port": "array"
+      },
+      "to": {
+        "node": "masked",
+        "port": "b"
+      }
+    },
+    {
+      "from": {
+        "node": "tidy",
+        "port": "array"
+      },
+      "to": {
+        "node": "masked",
+        "port": "mask"
+      }
+    }
+  ]
+}

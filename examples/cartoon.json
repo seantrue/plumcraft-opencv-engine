@@ -1,0 +1,298 @@
+{
+  "version": 1,
+  "nodes": {
+    "source": {
+      "kind": "opencv.test_picture",
+      "pos": [
+        0,
+        200
+      ],
+      "values": {
+        "width": 256,
+        "height": 192
+      }
+    },
+    "down1": {
+      "kind": "opencv.pyramid_down",
+      "pos": [
+        300,
+        0
+      ]
+    },
+    "down2": {
+      "kind": "opencv.pyramid_down",
+      "pos": [
+        600,
+        0
+      ]
+    },
+    "smooth1": {
+      "kind": "opencv.bilateral",
+      "pos": [
+        900,
+        0
+      ],
+      "values": {
+        "diameter": 9,
+        "sigma_colour": 0.035,
+        "sigma_space": 7.0
+      }
+    },
+    "smooth2": {
+      "kind": "opencv.bilateral",
+      "pos": [
+        1200,
+        0
+      ],
+      "values": {
+        "diameter": 9,
+        "sigma_colour": 0.035,
+        "sigma_space": 7.0
+      }
+    },
+    "smooth3": {
+      "kind": "opencv.bilateral",
+      "pos": [
+        1500,
+        0
+      ],
+      "values": {
+        "diameter": 9,
+        "sigma_colour": 0.035,
+        "sigma_space": 7.0
+      }
+    },
+    "up1": {
+      "kind": "opencv.pyramid_up",
+      "pos": [
+        1800,
+        0
+      ]
+    },
+    "up2": {
+      "kind": "opencv.pyramid_up",
+      "pos": [
+        2100,
+        0
+      ]
+    },
+    "grey": {
+      "kind": "opencv.to_grey",
+      "pos": [
+        300,
+        400
+      ]
+    },
+    "median": {
+      "kind": "opencv.median_blur",
+      "pos": [
+        600,
+        400
+      ],
+      "values": {
+        "size": 7
+      }
+    },
+    "lines": {
+      "kind": "opencv.adaptive_threshold",
+      "pos": [
+        900,
+        400
+      ],
+      "values": {
+        "size": 9,
+        "offset": 0.01
+      }
+    },
+    "cartoon": {
+      "kind": "opencv.bitwise",
+      "pos": [
+        2400,
+        200
+      ],
+      "values": {
+        "operation": "and"
+      }
+    }
+  },
+  "wires": [
+    {
+      "from": {
+        "node": "source",
+        "port": "array"
+      },
+      "to": {
+        "node": "down1",
+        "port": "picture"
+      }
+    },
+    {
+      "from": {
+        "node": "down1",
+        "port": "array"
+      },
+      "to": {
+        "node": "down2",
+        "port": "picture"
+      }
+    },
+    {
+      "from": {
+        "node": "down2",
+        "port": "array"
+      },
+      "to": {
+        "node": "smooth1",
+        "port": "picture"
+      }
+    },
+    {
+      "from": {
+        "node": "smooth1",
+        "port": "array"
+      },
+      "to": {
+        "node": "smooth2",
+        "port": "picture"
+      }
+    },
+    {
+      "from": {
+        "node": "smooth2",
+        "port": "array"
+      },
+      "to": {
+        "node": "smooth3",
+        "port": "picture"
+      }
+    },
+    {
+      "from": {
+        "node": "smooth3",
+        "port": "array"
+      },
+      "to": {
+        "node": "up1",
+        "port": "picture"
+      }
+    },
+    {
+      "from": {
+        "node": "up1",
+        "port": "array"
+      },
+      "to": {
+        "node": "up2",
+        "port": "picture"
+      }
+    },
+    {
+      "from": {
+        "node": "source",
+        "port": "array"
+      },
+      "to": {
+        "node": "grey",
+        "port": "picture"
+      }
+    },
+    {
+      "from": {
+        "node": "grey",
+        "port": "array"
+      },
+      "to": {
+        "node": "median",
+        "port": "picture"
+      }
+    },
+    {
+      "from": {
+        "node": "median",
+        "port": "array"
+      },
+      "to": {
+        "node": "lines",
+        "port": "picture"
+      }
+    },
+    {
+      "from": {
+        "node": "up2",
+        "port": "array"
+      },
+      "to": {
+        "node": "cartoon",
+        "port": "a"
+      }
+    },
+    {
+      "from": {
+        "node": "up2",
+        "port": "array"
+      },
+      "to": {
+        "node": "cartoon",
+        "port": "b"
+      }
+    },
+    {
+      "from": {
+        "node": "lines",
+        "port": "array"
+      },
+      "to": {
+        "node": "cartoon",
+        "port": "mask"
+      }
+    }
+  ],
+  "groups": {
+    "g1": {
+      "name": "Cartoon",
+      "nodes": [
+        "down1",
+        "down2",
+        "smooth1",
+        "smooth2",
+        "smooth3",
+        "up1",
+        "up2",
+        "grey",
+        "median",
+        "lines",
+        "cartoon"
+      ],
+      "promoted": [
+        {
+          "port": {
+            "node": "lines",
+            "port": "size"
+          },
+          "label": "outline"
+        },
+        {
+          "port": {
+            "node": "median",
+            "port": "size"
+          },
+          "label": "line smoothing"
+        }
+      ],
+      "outputs": [
+        {
+          "from": {
+            "node": "cartoon",
+            "port": "array"
+          },
+          "name": "picture"
+        }
+      ],
+      "collapsed": true,
+      "pos": [
+        400,
+        200
+      ]
+    }
+  }
+}

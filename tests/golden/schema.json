@@ -1,0 +1,2942 @@
+{
+  "nodes": [
+    {
+      "category": [
+        "Building blocks",
+        "Files"
+      ],
+      "description": "The files in a folder whose names match the pattern (*.png, *.jpg: * and ?, case ignored; several separated by commas), sorted, optionally in its subfolders too. Wire it into a node's file input to run that node once per file, each result labelled with the file's name.",
+      "display": "Find Files",
+      "id": "file.find",
+      "inputs": [
+        {
+          "default": "",
+          "name": "folder",
+          "path": {
+            "filters": [],
+            "mode": "dir"
+          },
+          "tooltip": "The folder to search",
+          "type": "STRING"
+        },
+        {
+          "default": "*",
+          "name": "pattern",
+          "tooltip": "File names to match: * and ?, several separated by commas (*.png, *.jpg)",
+          "type": "STRING"
+        },
+        {
+          "default": false,
+          "name": "recursive",
+          "tooltip": "Search the subfolders too",
+          "type": "BOOL"
+        }
+      ],
+      "outputs": [
+        {
+          "list": true,
+          "name": "files",
+          "socket": "socket",
+          "type": "STRING"
+        }
+      ]
+    },
+    {
+      "category": [
+        "Building blocks",
+        "Files"
+      ],
+      "description": "Read a file into a value: an image, an SVG, a PDF or any bytes, its media type from its extension. Given a list of files (Find Files, Select Files), it reads each, so wiring its value into, say, an app's Open image input opens every file.",
+      "display": "Load Files",
+      "id": "file.load",
+      "inputs": [
+        {
+          "default": "",
+          "name": "file",
+          "path": {
+            "filters": [
+              {
+                "extensions": [],
+                "name": "Any file"
+              }
+            ],
+            "mode": "open"
+          },
+          "socket": "both",
+          "tooltip": "The file to read; wire Find Files or Select Files to read each",
+          "type": "STRING"
+        }
+      ],
+      "outputs": [
+        {
+          "name": "value",
+          "socket": "socket",
+          "type": "ANY"
+        }
+      ]
+    },
+    {
+      "category": [
+        "Building blocks",
+        "Files"
+      ],
+      "description": "The files chosen with \u2026 (several at once), as a list: wire it into a node's file input to run that node once per file, each result labelled with the file's name.",
+      "display": "Select Files",
+      "id": "file.select",
+      "inputs": [
+        {
+          "default": "",
+          "name": "files",
+          "path": {
+            "filters": [],
+            "mode": "files"
+          },
+          "tooltip": "The files, one path per line: choose them with \u2026",
+          "type": "STRING"
+        }
+      ],
+      "outputs": [
+        {
+          "list": true,
+          "name": "files",
+          "socket": "socket",
+          "type": "STRING"
+        }
+      ]
+    },
+    {
+      "category": [
+        "Building blocks",
+        "Files"
+      ],
+      "description": "Write values into a folder: each file is named from basename and what made the value (trace_corgi_colors-8.svg: the file it came from and the settings varied), with its type's extension. A different file already there is an error unless overwrite is on.",
+      "display": "Write Files",
+      "flags": {
+        "input_list": true,
+        "output_node": true
+      },
+      "id": "file.write",
+      "inputs": [
+        {
+          "name": "values",
+          "socket": "socket",
+          "tooltip": "The values to write: one, or a list",
+          "type": "ANY"
+        },
+        {
+          "default": "",
+          "name": "folder",
+          "path": {
+            "filters": [],
+            "mode": "dir"
+          },
+          "tooltip": "The folder to write into (made when missing)",
+          "type": "STRING"
+        },
+        {
+          "default": "out",
+          "name": "basename",
+          "tooltip": "The start of every file name; what varied follows it",
+          "type": "STRING"
+        },
+        {
+          "default": false,
+          "name": "overwrite",
+          "tooltip": "Replace files that are already there",
+          "type": "BOOL"
+        }
+      ],
+      "memo": {
+        "scope": "none"
+      },
+      "outputs": [
+        {
+          "list": true,
+          "name": "files",
+          "socket": "socket",
+          "type": "STRING"
+        }
+      ]
+    },
+    {
+      "category": [
+        "OpenCV",
+        "Composite"
+      ],
+      "description": "Where two pictures of one size differ, and by how much.",
+      "display": "Abs Diff",
+      "family": "opencv",
+      "id": "opencv.abs_diff",
+      "inputs": [
+        {
+          "name": "a",
+          "socket": "socket",
+          "type": "ARRAY"
+        },
+        {
+          "name": "b",
+          "socket": "socket",
+          "type": "ARRAY"
+        }
+      ],
+      "outputs": [
+        {
+          "name": "array",
+          "type": "ARRAY"
+        }
+      ]
+    },
+    {
+      "category": [
+        "OpenCV",
+        "Edges"
+      ],
+      "description": "One channel as a mask, each pixel against its neighbourhood's mean less `offset`: survives uneven lighting.",
+      "display": "Adaptive Threshold",
+      "family": "opencv",
+      "id": "opencv.adaptive_threshold",
+      "inputs": [
+        {
+          "name": "picture",
+          "socket": "socket",
+          "type": "ARRAY"
+        },
+        {
+          "default": 15,
+          "max": 99.0,
+          "min": 3.0,
+          "name": "size",
+          "type": "INT"
+        },
+        {
+          "default": 0.02,
+          "max": 1.0,
+          "min": -1.0,
+          "name": "offset",
+          "type": "FLOAT"
+        },
+        {
+          "default": false,
+          "name": "invert",
+          "type": "BOOL"
+        }
+      ],
+      "outputs": [
+        {
+          "name": "array",
+          "type": "ARRAY"
+        }
+      ]
+    },
+    {
+      "category": [
+        "OpenCV",
+        "Composite"
+      ],
+      "description": "Two pictures of one size mixed: a \u00d7 weight a + b \u00d7 weight b + offset.",
+      "display": "Add Weighted",
+      "family": "opencv",
+      "id": "opencv.add_weighted",
+      "inputs": [
+        {
+          "name": "a",
+          "socket": "socket",
+          "type": "ARRAY"
+        },
+        {
+          "name": "b",
+          "socket": "socket",
+          "type": "ARRAY"
+        },
+        {
+          "default": 0.5,
+          "max": 10.0,
+          "min": -10.0,
+          "name": "weight_a",
+          "type": "FLOAT"
+        },
+        {
+          "default": 0.5,
+          "max": 10.0,
+          "min": -10.0,
+          "name": "weight_b",
+          "type": "FLOAT"
+        },
+        {
+          "default": 0.0,
+          "max": 1.0,
+          "min": -1.0,
+          "name": "offset",
+          "type": "FLOAT"
+        }
+      ],
+      "outputs": [
+        {
+          "name": "array",
+          "type": "ARRAY"
+        }
+      ]
+    },
+    {
+      "category": [
+        "OpenCV",
+        "Filters"
+      ],
+      "description": "Smooths flat areas and keeps edges. Two pixels mix when they are near each other and near in colour.",
+      "display": "Bilateral Filter",
+      "family": "opencv",
+      "id": "opencv.bilateral",
+      "inputs": [
+        {
+          "name": "picture",
+          "socket": "socket",
+          "type": "ARRAY"
+        },
+        {
+          "default": 7,
+          "max": 15.0,
+          "min": 1.0,
+          "name": "diameter",
+          "type": "INT"
+        },
+        {
+          "default": 0.1,
+          "max": 1.0,
+          "min": 0.001,
+          "name": "sigma_colour",
+          "type": "FLOAT"
+        },
+        {
+          "default": 5.0,
+          "max": 50.0,
+          "min": 0.1,
+          "name": "sigma_space",
+          "type": "FLOAT"
+        }
+      ],
+      "outputs": [
+        {
+          "name": "array",
+          "type": "ARRAY"
+        }
+      ]
+    },
+    {
+      "category": [
+        "OpenCV",
+        "Composite"
+      ],
+      "description": "Masks combined bit by bit, or a picture kept where a mask is set (And with b the same picture). `not` uses only a.",
+      "display": "Bitwise",
+      "family": "opencv",
+      "id": "opencv.bitwise",
+      "inputs": [
+        {
+          "name": "a",
+          "socket": "socket",
+          "type": "ARRAY"
+        },
+        {
+          "name": "b",
+          "optional": true,
+          "socket": "socket",
+          "type": "ARRAY"
+        },
+        {
+          "choices": [
+            "and",
+            "or",
+            "xor",
+            "not"
+          ],
+          "default": "and",
+          "name": "operation",
+          "type": "ENUM"
+        },
+        {
+          "name": "mask",
+          "optional": true,
+          "socket": "socket",
+          "type": "ARRAY"
+        }
+      ],
+      "outputs": [
+        {
+          "name": "array",
+          "type": "ARRAY"
+        }
+      ]
+    },
+    {
+      "category": [
+        "OpenCV",
+        "Filters"
+      ],
+      "description": "Each pixel the plain mean of its neighbours: the fastest blur.",
+      "display": "Box Filter",
+      "family": "opencv",
+      "id": "opencv.box_filter",
+      "inputs": [
+        {
+          "name": "picture",
+          "socket": "socket",
+          "type": "ARRAY"
+        },
+        {
+          "default": 5,
+          "max": 31.0,
+          "min": 1.0,
+          "name": "size",
+          "tooltip": "Kernel size; an even one becomes the next odd one",
+          "type": "INT"
+        }
+      ],
+      "outputs": [
+        {
+          "name": "array",
+          "type": "ARRAY"
+        }
+      ]
+    },
+    {
+      "category": [
+        "OpenCV",
+        "Edges"
+      ],
+      "description": "Thin edges as a mask, 0 or 1. Thresholds are 0-1 where OpenCV's are 0-255. A low above the high swaps with it.",
+      "display": "Canny",
+      "family": "opencv",
+      "id": "opencv.canny",
+      "inputs": [
+        {
+          "name": "picture",
+          "socket": "socket",
+          "type": "ARRAY"
+        },
+        {
+          "default": 0.2,
+          "max": 1.0,
+          "min": 0.0,
+          "name": "low",
+          "type": "FLOAT"
+        },
+        {
+          "default": 0.5,
+          "max": 1.0,
+          "min": 0.0,
+          "name": "high",
+          "type": "FLOAT"
+        }
+      ],
+      "outputs": [
+        {
+          "name": "array",
+          "type": "ARRAY"
+        }
+      ]
+    },
+    {
+      "category": [
+        "OpenCV",
+        "Photo"
+      ],
+      "description": "A drawing from a photo: flattened colour with dark outlines. `examples/cartoon.json` is the same steps as a group you can open and change.",
+      "display": "Cartoon",
+      "family": "opencv",
+      "id": "opencv.cartoon",
+      "inputs": [
+        {
+          "name": "picture",
+          "socket": "socket",
+          "type": "ARRAY"
+        },
+        {
+          "default": 2,
+          "max": 4.0,
+          "min": 0.0,
+          "name": "levels",
+          "tooltip": "Pyramid levels: more is flatter and faster",
+          "type": "INT"
+        },
+        {
+          "default": 7,
+          "max": 14.0,
+          "min": 1.0,
+          "name": "smoothing",
+          "tooltip": "Bilateral passes",
+          "type": "INT"
+        },
+        {
+          "default": 9,
+          "max": 99.0,
+          "min": 3.0,
+          "name": "outline",
+          "tooltip": "Adaptive threshold's neighbourhood: larger gives bolder outlines",
+          "type": "INT"
+        }
+      ],
+      "outputs": [
+        {
+          "name": "array",
+          "type": "ARRAY"
+        }
+      ]
+    },
+    {
+      "category": [
+        "OpenCV",
+        "Colour"
+      ],
+      "description": "Equalize Histogram by region, limited so noise isn't amplified: brings out detail in dark and bright areas alike.",
+      "display": "CLAHE",
+      "family": "opencv",
+      "id": "opencv.clahe",
+      "inputs": [
+        {
+          "name": "picture",
+          "socket": "socket",
+          "type": "ARRAY"
+        },
+        {
+          "default": 2.0,
+          "max": 40.0,
+          "min": 0.1,
+          "name": "limit",
+          "tooltip": "How far contrast may rise; lower is gentler",
+          "type": "FLOAT"
+        },
+        {
+          "default": 8,
+          "max": 32.0,
+          "min": 1.0,
+          "name": "tiles",
+          "type": "INT"
+        }
+      ],
+      "outputs": [
+        {
+          "name": "array",
+          "type": "ARRAY"
+        }
+      ]
+    },
+    {
+      "category": [
+        "OpenCV",
+        "Morphology"
+      ],
+      "description": "Number each separate shape in a mask: integer labels, 0 for background (the viewer's labels view colours them), and how many.",
+      "display": "Connected Components",
+      "family": "opencv",
+      "id": "opencv.connected_components",
+      "inputs": [
+        {
+          "name": "mask",
+          "socket": "socket",
+          "type": "ARRAY"
+        }
+      ],
+      "outputs": [
+        {
+          "name": "labels",
+          "type": "ARRAY"
+        },
+        {
+          "name": "count",
+          "type": "INT"
+        }
+      ]
+    },
+    {
+      "category": [
+        "OpenCV",
+        "Colour"
+      ],
+      "description": "Contrast and brightness: each value times gain, plus offset, clipped to 0-1.",
+      "display": "Convert Scale",
+      "family": "opencv",
+      "id": "opencv.convert_scale",
+      "inputs": [
+        {
+          "name": "picture",
+          "socket": "socket",
+          "type": "ARRAY"
+        },
+        {
+          "default": 1.2,
+          "max": 10.0,
+          "min": -10.0,
+          "name": "gain",
+          "type": "FLOAT"
+        },
+        {
+          "default": 0.0,
+          "max": 1.0,
+          "min": -1.0,
+          "name": "offset",
+          "type": "FLOAT"
+        }
+      ],
+      "outputs": [
+        {
+          "name": "array",
+          "type": "ARRAY"
+        }
+      ]
+    },
+    {
+      "category": [
+        "OpenCV",
+        "Geometry"
+      ],
+      "description": "A rectangle of a picture. One reaching past the edge is cut there; one entirely outside is a config error.",
+      "display": "Crop",
+      "family": "opencv",
+      "id": "opencv.crop",
+      "inputs": [
+        {
+          "name": "picture",
+          "socket": "socket",
+          "type": "ARRAY"
+        },
+        {
+          "default": 0,
+          "max": 16384.0,
+          "min": 0.0,
+          "name": "x",
+          "type": "INT"
+        },
+        {
+          "default": 0,
+          "max": 16384.0,
+          "min": 0.0,
+          "name": "y",
+          "type": "INT"
+        },
+        {
+          "default": 64,
+          "max": 16384.0,
+          "min": 1.0,
+          "name": "width",
+          "type": "INT"
+        },
+        {
+          "default": 64,
+          "max": 16384.0,
+          "min": 1.0,
+          "name": "height",
+          "type": "INT"
+        }
+      ],
+      "outputs": [
+        {
+          "name": "array",
+          "type": "ARRAY"
+        }
+      ]
+    },
+    {
+      "category": [
+        "OpenCV",
+        "Files"
+      ],
+      "description": "A picture file's bytes, from Encode Image or another engine, as RGB, 0-1. The inverse of Encode Image.",
+      "display": "Decode Image",
+      "family": "opencv",
+      "id": "opencv.decode_image",
+      "inputs": [
+        {
+          "name": "encoded",
+          "socket": "socket",
+          "type": "IMAGE"
+        }
+      ],
+      "outputs": [
+        {
+          "name": "array",
+          "type": "ARRAY"
+        }
+      ]
+    },
+    {
+      "category": [
+        "OpenCV",
+        "Photo"
+      ],
+      "description": "Fast Non-Local Means: removes noise by averaging similar patches. Slow on large pictures, and it can't stop part way once started.",
+      "display": "Denoise",
+      "family": "opencv",
+      "id": "opencv.denoise",
+      "inputs": [
+        {
+          "name": "picture",
+          "socket": "socket",
+          "type": "ARRAY"
+        },
+        {
+          "default": 5.0,
+          "max": 100.0,
+          "min": 0.0,
+          "name": "strength",
+          "type": "FLOAT"
+        },
+        {
+          "default": 5.0,
+          "max": 100.0,
+          "min": 0.0,
+          "name": "colour_strength",
+          "type": "FLOAT"
+        }
+      ],
+      "outputs": [
+        {
+          "name": "array",
+          "type": "ARRAY"
+        }
+      ]
+    },
+    {
+      "category": [
+        "OpenCV",
+        "Photo"
+      ],
+      "description": "Brings out fine detail, for a crisper picture.",
+      "display": "Detail Enhance",
+      "family": "opencv",
+      "id": "opencv.detail_enhance",
+      "inputs": [
+        {
+          "name": "picture",
+          "socket": "socket",
+          "type": "ARRAY"
+        },
+        {
+          "default": 10.0,
+          "max": 200.0,
+          "min": 0.0,
+          "name": "sigma_s",
+          "type": "FLOAT"
+        },
+        {
+          "default": 0.15,
+          "max": 1.0,
+          "min": 0.0,
+          "name": "sigma_r",
+          "type": "FLOAT"
+        }
+      ],
+      "outputs": [
+        {
+          "name": "array",
+          "type": "ARRAY"
+        }
+      ]
+    },
+    {
+      "category": [
+        "OpenCV",
+        "Morphology"
+      ],
+      "description": "For each set pixel of a mask, how far it is, in pixels, to the nearest unset one.",
+      "display": "Distance Transform",
+      "family": "opencv",
+      "id": "opencv.distance_transform",
+      "inputs": [
+        {
+          "name": "mask",
+          "socket": "socket",
+          "type": "ARRAY"
+        }
+      ],
+      "outputs": [
+        {
+          "name": "array",
+          "type": "ARRAY"
+        }
+      ]
+    },
+    {
+      "category": [
+        "OpenCV",
+        "Features"
+      ],
+      "description": "The contours from Find Contours drawn on a picture. Thickness 0 is taken as 1.",
+      "display": "Draw Contours",
+      "family": "opencv",
+      "id": "opencv.draw_contours",
+      "inputs": [
+        {
+          "name": "picture",
+          "socket": "socket",
+          "type": "ARRAY"
+        },
+        {
+          "name": "contours",
+          "socket": "socket",
+          "type": "TABLE"
+        },
+        {
+          "default": "#00ff00",
+          "name": "colour",
+          "type": "STRING"
+        },
+        {
+          "default": 1,
+          "max": 32.0,
+          "min": -1.0,
+          "name": "thickness",
+          "tooltip": "-1 fills them",
+          "type": "INT"
+        }
+      ],
+      "outputs": [
+        {
+          "name": "array",
+          "type": "ARRAY"
+        }
+      ]
+    },
+    {
+      "category": [
+        "OpenCV",
+        "Features"
+      ],
+      "description": "A table of x, y drawn on a picture as circles.",
+      "display": "Draw Points",
+      "family": "opencv",
+      "id": "opencv.draw_points",
+      "inputs": [
+        {
+          "name": "picture",
+          "socket": "socket",
+          "type": "ARRAY"
+        },
+        {
+          "name": "points",
+          "socket": "socket",
+          "type": "TABLE"
+        },
+        {
+          "default": "#ffff00",
+          "name": "colour",
+          "type": "STRING"
+        },
+        {
+          "default": 3,
+          "max": 64.0,
+          "min": 1.0,
+          "name": "radius",
+          "type": "INT"
+        }
+      ],
+      "outputs": [
+        {
+          "name": "array",
+          "type": "ARRAY"
+        }
+      ]
+    },
+    {
+      "category": [
+        "OpenCV",
+        "Features"
+      ],
+      "description": "A table of x1, y1, x2, y2 drawn on a picture.",
+      "display": "Draw Segments",
+      "family": "opencv",
+      "id": "opencv.draw_segments",
+      "inputs": [
+        {
+          "name": "picture",
+          "socket": "socket",
+          "type": "ARRAY"
+        },
+        {
+          "name": "segments",
+          "socket": "socket",
+          "type": "TABLE"
+        },
+        {
+          "default": "#ff0000",
+          "name": "colour",
+          "type": "STRING"
+        },
+        {
+          "default": 1,
+          "max": 32.0,
+          "min": 1.0,
+          "name": "thickness",
+          "type": "INT"
+        }
+      ],
+      "outputs": [
+        {
+          "name": "array",
+          "type": "ARRAY"
+        }
+      ]
+    },
+    {
+      "category": [
+        "OpenCV",
+        "Photo"
+      ],
+      "description": "Smooths while keeping edges, faster than the bilateral filter.",
+      "display": "Edge-Preserving Filter",
+      "family": "opencv",
+      "id": "opencv.edge_preserving",
+      "inputs": [
+        {
+          "name": "picture",
+          "socket": "socket",
+          "type": "ARRAY"
+        },
+        {
+          "default": 60.0,
+          "max": 200.0,
+          "min": 0.0,
+          "name": "sigma_s",
+          "type": "FLOAT"
+        },
+        {
+          "default": 0.4,
+          "max": 1.0,
+          "min": 0.0,
+          "name": "sigma_r",
+          "type": "FLOAT"
+        }
+      ],
+      "outputs": [
+        {
+          "name": "array",
+          "type": "ARRAY"
+        }
+      ]
+    },
+    {
+      "category": [
+        "OpenCV",
+        "Files"
+      ],
+      "description": "A picture as a file's bytes, 8 bits a channel, for Write Files or another engine. The inverse of Decode Image.",
+      "display": "Encode Image",
+      "family": "opencv",
+      "id": "opencv.encode_image",
+      "inputs": [
+        {
+          "name": "picture",
+          "socket": "socket",
+          "type": "ARRAY"
+        },
+        {
+          "choices": [
+            "png",
+            "jpeg",
+            "webp"
+          ],
+          "default": "png",
+          "name": "format",
+          "type": "ENUM"
+        }
+      ],
+      "outputs": [
+        {
+          "name": "image",
+          "type": "IMAGE"
+        }
+      ]
+    },
+    {
+      "category": [
+        "OpenCV",
+        "Colour"
+      ],
+      "description": "Spread a picture's tones across the range: one channel directly, RGB by its luminance, so colours keep their hue.",
+      "display": "Equalize Histogram",
+      "family": "opencv",
+      "id": "opencv.equalize",
+      "inputs": [
+        {
+          "name": "picture",
+          "socket": "socket",
+          "type": "ARRAY"
+        }
+      ],
+      "outputs": [
+        {
+          "name": "array",
+          "type": "ARRAY"
+        }
+      ]
+    },
+    {
+      "category": [
+        "OpenCV",
+        "Filters"
+      ],
+      "description": "Any convolution, from a kernel you type. The default sharpens.",
+      "display": "Filter 2D",
+      "family": "opencv",
+      "id": "opencv.filter_2d",
+      "inputs": [
+        {
+          "name": "picture",
+          "socket": "socket",
+          "type": "ARRAY"
+        },
+        {
+          "default": "0 -1 0; -1 5 -1; 0 -1 0",
+          "name": "kernel",
+          "tooltip": "Numbers by row, rows split by ;",
+          "type": "STRING"
+        },
+        {
+          "default": false,
+          "name": "normalise",
+          "tooltip": "Divide by the kernel's sum, when that isn't 0",
+          "type": "BOOL"
+        }
+      ],
+      "outputs": [
+        {
+          "name": "array",
+          "type": "ARRAY"
+        }
+      ]
+    },
+    {
+      "category": [
+        "OpenCV",
+        "Features"
+      ],
+      "description": "The outlines of shapes in a mask, as a table: area, perimeter, box, and points as text `x,y x,y \u2026`. Draw Contours puts them back.",
+      "display": "Find Contours",
+      "family": "opencv",
+      "id": "opencv.find_contours",
+      "inputs": [
+        {
+          "name": "mask",
+          "socket": "socket",
+          "type": "ARRAY"
+        },
+        {
+          "choices": [
+            "outer",
+            "all"
+          ],
+          "default": "outer",
+          "name": "which",
+          "type": "ENUM"
+        }
+      ],
+      "outputs": [
+        {
+          "name": "table",
+          "type": "TABLE"
+        }
+      ]
+    },
+    {
+      "category": [
+        "OpenCV",
+        "Geometry"
+      ],
+      "description": "A picture mirrored. A second flip undoes it.",
+      "display": "Flip",
+      "family": "opencv",
+      "id": "opencv.flip",
+      "inputs": [
+        {
+          "name": "picture",
+          "socket": "socket",
+          "type": "ARRAY"
+        },
+        {
+          "choices": [
+            "left to right",
+            "top to bottom",
+            "both"
+          ],
+          "default": "left to right",
+          "name": "axis",
+          "type": "ENUM"
+        }
+      ],
+      "outputs": [
+        {
+          "name": "array",
+          "type": "ARRAY"
+        }
+      ]
+    },
+    {
+      "category": [
+        "OpenCV",
+        "Colour"
+      ],
+      "description": "A picture in another colour space, back to RGB. The inverse of To Colour Space.",
+      "display": "From Colour Space",
+      "family": "opencv",
+      "id": "opencv.from_space",
+      "inputs": [
+        {
+          "name": "picture",
+          "socket": "socket",
+          "type": "ARRAY"
+        },
+        {
+          "choices": [
+            "HSV",
+            "Lab",
+            "YCrCb"
+          ],
+          "default": "HSV",
+          "name": "space",
+          "type": "ENUM"
+        }
+      ],
+      "outputs": [
+        {
+          "name": "array",
+          "type": "ARRAY"
+        }
+      ]
+    },
+    {
+      "category": [
+        "OpenCV",
+        "Filters"
+      ],
+      "description": "A soft blur. The kernel follows from sigma.",
+      "display": "Gaussian Blur",
+      "family": "opencv",
+      "id": "opencv.gaussian_blur",
+      "inputs": [
+        {
+          "name": "picture",
+          "socket": "socket",
+          "type": "ARRAY"
+        },
+        {
+          "default": 2.0,
+          "max": 50.0,
+          "min": 0.1,
+          "name": "sigma",
+          "type": "FLOAT"
+        }
+      ],
+      "outputs": [
+        {
+          "name": "array",
+          "type": "ARRAY"
+        }
+      ]
+    },
+    {
+      "category": [
+        "OpenCV",
+        "Features"
+      ],
+      "description": "Strong corners, as a table x, y. Draw Points puts them back on a picture.",
+      "display": "Good Features",
+      "family": "opencv",
+      "id": "opencv.good_features",
+      "inputs": [
+        {
+          "name": "picture",
+          "socket": "socket",
+          "type": "ARRAY"
+        },
+        {
+          "default": 100,
+          "max": 10000.0,
+          "min": 1.0,
+          "name": "corners",
+          "type": "INT"
+        },
+        {
+          "default": 0.05,
+          "max": 1.0,
+          "min": 0.001,
+          "name": "quality",
+          "type": "FLOAT"
+        },
+        {
+          "default": 8.0,
+          "max": 1000.0,
+          "min": 1.0,
+          "name": "spacing",
+          "type": "FLOAT"
+        }
+      ],
+      "outputs": [
+        {
+          "name": "table",
+          "type": "TABLE"
+        }
+      ]
+    },
+    {
+      "category": [
+        "OpenCV",
+        "Segmentation"
+      ],
+      "description": "Separate a subject from its background, given a box around it: a mask, 1 for the subject.",
+      "display": "Grab Cut",
+      "family": "opencv",
+      "id": "opencv.grab_cut",
+      "inputs": [
+        {
+          "name": "picture",
+          "socket": "socket",
+          "type": "ARRAY"
+        },
+        {
+          "default": 0.1,
+          "max": 1.0,
+          "min": 0.0,
+          "name": "left",
+          "tooltip": "The box around the subject, as fractions of the picture",
+          "type": "FLOAT"
+        },
+        {
+          "default": 0.1,
+          "max": 1.0,
+          "min": 0.0,
+          "name": "top",
+          "type": "FLOAT"
+        },
+        {
+          "default": 0.9,
+          "max": 1.0,
+          "min": 0.0,
+          "name": "right",
+          "type": "FLOAT"
+        },
+        {
+          "default": 0.9,
+          "max": 1.0,
+          "min": 0.0,
+          "name": "bottom",
+          "type": "FLOAT"
+        },
+        {
+          "default": 3,
+          "max": 20.0,
+          "min": 1.0,
+          "name": "iterations",
+          "type": "INT"
+        },
+        {
+          "default": 1,
+          "max": 2147483648.0,
+          "min": 0.0,
+          "name": "seed",
+          "tooltip": "The same seed gives the same result",
+          "type": "INT"
+        }
+      ],
+      "outputs": [
+        {
+          "name": "array",
+          "type": "ARRAY"
+        }
+      ]
+    },
+    {
+      "category": [
+        "OpenCV",
+        "Features"
+      ],
+      "description": "Straight line segments in an edge mask, as a table x1, y1, x2, y2, length. Draw Segments puts them back on a picture.",
+      "display": "Hough Lines",
+      "family": "opencv",
+      "id": "opencv.hough_lines",
+      "inputs": [
+        {
+          "name": "edges",
+          "socket": "socket",
+          "tooltip": "An edge mask, from Canny",
+          "type": "ARRAY"
+        },
+        {
+          "default": 40,
+          "max": 1000.0,
+          "min": 1.0,
+          "name": "votes",
+          "type": "INT"
+        },
+        {
+          "default": 30,
+          "max": 16384.0,
+          "min": 0.0,
+          "name": "min_length",
+          "type": "INT"
+        },
+        {
+          "default": 5,
+          "max": 16384.0,
+          "min": 0.0,
+          "name": "max_gap",
+          "type": "INT"
+        }
+      ],
+      "outputs": [
+        {
+          "name": "table",
+          "type": "TABLE"
+        }
+      ]
+    },
+    {
+      "category": [
+        "OpenCV",
+        "Edges"
+      ],
+      "description": "A mask, 1 where every channel lies in its range. Pairs with To Colour Space, to pick a hue (0-360 in HSV). One channel uses the first range.",
+      "display": "In Range",
+      "family": "opencv",
+      "id": "opencv.in_range",
+      "inputs": [
+        {
+          "name": "picture",
+          "socket": "socket",
+          "type": "ARRAY"
+        },
+        {
+          "default": 0.0,
+          "name": "low1",
+          "type": "FLOAT"
+        },
+        {
+          "default": 1.0,
+          "name": "high1",
+          "type": "FLOAT"
+        },
+        {
+          "default": 0.0,
+          "name": "low2",
+          "type": "FLOAT"
+        },
+        {
+          "default": 1.0,
+          "name": "high2",
+          "type": "FLOAT"
+        },
+        {
+          "default": 0.0,
+          "name": "low3",
+          "type": "FLOAT"
+        },
+        {
+          "default": 1.0,
+          "name": "high3",
+          "type": "FLOAT"
+        }
+      ],
+      "outputs": [
+        {
+          "name": "array",
+          "type": "ARRAY"
+        }
+      ]
+    },
+    {
+      "category": [
+        "OpenCV",
+        "Photo"
+      ],
+      "description": "Fill a masked area from what surrounds it, to remove a mark or an object.",
+      "display": "Inpaint",
+      "family": "opencv",
+      "id": "opencv.inpaint",
+      "inputs": [
+        {
+          "name": "picture",
+          "socket": "socket",
+          "type": "ARRAY"
+        },
+        {
+          "name": "mask",
+          "socket": "socket",
+          "tooltip": "What to fill: any array above 0, as Threshold or In Range make",
+          "type": "ARRAY"
+        },
+        {
+          "default": 3.0,
+          "max": 64.0,
+          "min": 1.0,
+          "name": "radius",
+          "type": "FLOAT"
+        },
+        {
+          "choices": [
+            "telea",
+            "navier-stokes"
+          ],
+          "default": "telea",
+          "name": "method",
+          "type": "ENUM"
+        }
+      ],
+      "outputs": [
+        {
+          "name": "array",
+          "type": "ARRAY"
+        }
+      ]
+    },
+    {
+      "category": [
+        "OpenCV",
+        "Segmentation"
+      ],
+      "description": "A picture reduced to a few colours, and those colours as a table.",
+      "display": "K-Means Colours",
+      "family": "opencv",
+      "id": "opencv.kmeans_colours",
+      "inputs": [
+        {
+          "name": "picture",
+          "socket": "socket",
+          "type": "ARRAY"
+        },
+        {
+          "default": 6,
+          "max": 64.0,
+          "min": 2.0,
+          "name": "colours",
+          "type": "INT"
+        },
+        {
+          "default": 1,
+          "max": 10.0,
+          "min": 1.0,
+          "name": "attempts",
+          "type": "INT"
+        },
+        {
+          "default": 1,
+          "max": 2147483648.0,
+          "min": 0.0,
+          "name": "seed",
+          "tooltip": "The same seed gives the same result",
+          "type": "INT"
+        }
+      ],
+      "outputs": [
+        {
+          "name": "picture",
+          "type": "ARRAY"
+        },
+        {
+          "name": "palette",
+          "type": "TABLE"
+        }
+      ]
+    },
+    {
+      "category": [
+        "OpenCV",
+        "Filters"
+      ],
+      "description": "Second derivative: edges as signed values on zero. A value view of `heat` shows them well.",
+      "display": "Laplacian",
+      "family": "opencv",
+      "id": "opencv.laplacian",
+      "inputs": [
+        {
+          "name": "picture",
+          "socket": "socket",
+          "type": "ARRAY"
+        },
+        {
+          "default": 3,
+          "max": 7.0,
+          "min": 1.0,
+          "name": "size",
+          "type": "INT"
+        }
+      ],
+      "outputs": [
+        {
+          "name": "array",
+          "type": "ARRAY"
+        }
+      ]
+    },
+    {
+      "category": [
+        "OpenCV",
+        "Files"
+      ],
+      "description": "A picture file as RGB, 0-1. A grey file comes as three equal channels.",
+      "display": "Load Image",
+      "family": "opencv",
+      "id": "opencv.load_image",
+      "inputs": [
+        {
+          "default": "",
+          "name": "path",
+          "path": {
+            "filters": [
+              {
+                "extensions": [
+                  "png",
+                  "jpg",
+                  "jpeg",
+                  "tif",
+                  "tiff",
+                  "webp"
+                ],
+                "name": "Pictures"
+              }
+            ],
+            "mode": "open"
+          },
+          "type": "STRING"
+        }
+      ],
+      "outputs": [
+        {
+          "name": "array",
+          "type": "ARRAY"
+        }
+      ]
+    },
+    {
+      "category": [
+        "OpenCV",
+        "Filters"
+      ],
+      "description": "Each pixel the median of its neighbours: removes specks and keeps edges.",
+      "display": "Median Blur",
+      "family": "opencv",
+      "id": "opencv.median_blur",
+      "inputs": [
+        {
+          "name": "picture",
+          "socket": "socket",
+          "type": "ARRAY"
+        },
+        {
+          "default": 5,
+          "max": 31.0,
+          "min": 1.0,
+          "name": "size",
+          "tooltip": "Kernel size; an even one becomes the next odd one",
+          "type": "INT"
+        }
+      ],
+      "outputs": [
+        {
+          "name": "array",
+          "type": "ARRAY"
+        }
+      ]
+    },
+    {
+      "category": [
+        "OpenCV",
+        "Colour"
+      ],
+      "description": "Three one-channel arrays of one size as an RGB picture. The inverse of Split Channels.",
+      "display": "Merge Channels",
+      "family": "opencv",
+      "id": "opencv.merge",
+      "inputs": [
+        {
+          "name": "c1",
+          "socket": "socket",
+          "type": "ARRAY"
+        },
+        {
+          "name": "c2",
+          "socket": "socket",
+          "type": "ARRAY"
+        },
+        {
+          "name": "c3",
+          "socket": "socket",
+          "type": "ARRAY"
+        }
+      ],
+      "outputs": [
+        {
+          "name": "array",
+          "type": "ARRAY"
+        }
+      ]
+    },
+    {
+      "category": [
+        "OpenCV",
+        "Morphology"
+      ],
+      "description": "Grow, shrink or tidy shapes in a mask or picture. Open removes specks; close fills holes.",
+      "display": "Morphology",
+      "family": "opencv",
+      "id": "opencv.morphology",
+      "inputs": [
+        {
+          "name": "picture",
+          "socket": "socket",
+          "type": "ARRAY"
+        },
+        {
+          "choices": [
+            "erode",
+            "dilate",
+            "open",
+            "close",
+            "gradient",
+            "top hat",
+            "black hat"
+          ],
+          "default": "open",
+          "name": "operation",
+          "type": "ENUM"
+        },
+        {
+          "choices": [
+            "rectangle",
+            "cross",
+            "ellipse"
+          ],
+          "default": "ellipse",
+          "name": "shape",
+          "type": "ENUM"
+        },
+        {
+          "default": 5,
+          "max": 31.0,
+          "min": 1.0,
+          "name": "size",
+          "tooltip": "Kernel size; an even one becomes the next odd one",
+          "type": "INT"
+        },
+        {
+          "default": 1,
+          "max": 20.0,
+          "min": 1.0,
+          "name": "iterations",
+          "type": "INT"
+        }
+      ],
+      "outputs": [
+        {
+          "name": "array",
+          "type": "ARRAY"
+        }
+      ]
+    },
+    {
+      "category": [
+        "OpenCV",
+        "Colour"
+      ],
+      "description": "A picture stretched to fill 0-1. A flat picture becomes zeros.",
+      "display": "Normalize",
+      "family": "opencv",
+      "id": "opencv.normalize",
+      "inputs": [
+        {
+          "name": "picture",
+          "socket": "socket",
+          "type": "ARRAY"
+        }
+      ],
+      "outputs": [
+        {
+          "name": "array",
+          "type": "ARRAY"
+        }
+      ]
+    },
+    {
+      "category": [
+        "OpenCV",
+        "Features"
+      ],
+      "description": "Distinctive points that survive scale and rotation, as a table x, y, size, angle, response. Draw Points puts them back.",
+      "display": "ORB Keypoints",
+      "family": "opencv",
+      "id": "opencv.orb_keypoints",
+      "inputs": [
+        {
+          "name": "picture",
+          "socket": "socket",
+          "type": "ARRAY"
+        },
+        {
+          "default": 200,
+          "max": 10000.0,
+          "min": 1.0,
+          "name": "features",
+          "type": "INT"
+        }
+      ],
+      "outputs": [
+        {
+          "name": "table",
+          "type": "TABLE"
+        }
+      ]
+    },
+    {
+      "category": [
+        "OpenCV",
+        "Photo"
+      ],
+      "description": "A pencil drawing, in grey and in colour.",
+      "display": "Pencil Sketch",
+      "family": "opencv",
+      "id": "opencv.pencil_sketch",
+      "inputs": [
+        {
+          "name": "picture",
+          "socket": "socket",
+          "type": "ARRAY"
+        },
+        {
+          "default": 60.0,
+          "max": 200.0,
+          "min": 0.0,
+          "name": "sigma_s",
+          "type": "FLOAT"
+        },
+        {
+          "default": 0.07,
+          "max": 1.0,
+          "min": 0.0,
+          "name": "sigma_r",
+          "type": "FLOAT"
+        },
+        {
+          "default": 0.05,
+          "max": 0.1,
+          "min": 0.0,
+          "name": "shade",
+          "type": "FLOAT"
+        }
+      ],
+      "outputs": [
+        {
+          "name": "grey",
+          "type": "ARRAY"
+        },
+        {
+          "name": "colour",
+          "type": "ARRAY"
+        }
+      ]
+    },
+    {
+      "category": [
+        "OpenCV",
+        "Geometry"
+      ],
+      "description": "Half the size, blurred first. Pyramid Up goes back in size, though the detail is gone.",
+      "display": "Pyramid Down",
+      "family": "opencv",
+      "id": "opencv.pyramid_down",
+      "inputs": [
+        {
+          "name": "picture",
+          "socket": "socket",
+          "type": "ARRAY"
+        }
+      ],
+      "outputs": [
+        {
+          "name": "array",
+          "type": "ARRAY"
+        }
+      ]
+    },
+    {
+      "category": [
+        "OpenCV",
+        "Geometry"
+      ],
+      "description": "Twice the size, smoothed. Pyramid Down goes back.",
+      "display": "Pyramid Up",
+      "family": "opencv",
+      "id": "opencv.pyramid_up",
+      "inputs": [
+        {
+          "name": "picture",
+          "socket": "socket",
+          "type": "ARRAY"
+        }
+      ],
+      "outputs": [
+        {
+          "name": "array",
+          "type": "ARRAY"
+        }
+      ]
+    },
+    {
+      "category": [
+        "OpenCV",
+        "Geometry"
+      ],
+      "description": "A picture at another size. Area suits shrinking, and cubic or Lanczos enlarging.",
+      "display": "Resize",
+      "family": "opencv",
+      "id": "opencv.resize",
+      "inputs": [
+        {
+          "name": "picture",
+          "socket": "socket",
+          "type": "ARRAY"
+        },
+        {
+          "default": 128,
+          "max": 16384.0,
+          "min": 1.0,
+          "name": "width",
+          "type": "INT"
+        },
+        {
+          "default": 0,
+          "max": 16384.0,
+          "min": 0.0,
+          "name": "height",
+          "tooltip": "0 keeps the shape",
+          "type": "INT"
+        },
+        {
+          "choices": [
+            "area",
+            "linear",
+            "cubic",
+            "lanczos",
+            "nearest"
+          ],
+          "default": "area",
+          "name": "method",
+          "type": "ENUM"
+        }
+      ],
+      "outputs": [
+        {
+          "name": "array",
+          "type": "ARRAY"
+        }
+      ]
+    },
+    {
+      "category": [
+        "OpenCV",
+        "Geometry"
+      ],
+      "description": "A picture turned by quarter turns, nothing lost. Three of one turn, or one of the opposite, undo it.",
+      "display": "Rotate",
+      "family": "opencv",
+      "id": "opencv.rotate",
+      "inputs": [
+        {
+          "name": "picture",
+          "socket": "socket",
+          "type": "ARRAY"
+        },
+        {
+          "choices": [
+            "90 clockwise",
+            "180",
+            "90 anticlockwise"
+          ],
+          "default": "90 clockwise",
+          "name": "turn",
+          "type": "ENUM"
+        }
+      ],
+      "outputs": [
+        {
+          "name": "array",
+          "type": "ARRAY"
+        }
+      ]
+    },
+    {
+      "category": [
+        "OpenCV",
+        "Filters"
+      ],
+      "description": "A sharper-angled Sobel, size 3: signed values on zero.",
+      "display": "Scharr",
+      "family": "opencv",
+      "id": "opencv.scharr",
+      "inputs": [
+        {
+          "name": "picture",
+          "socket": "socket",
+          "type": "ARRAY"
+        },
+        {
+          "choices": [
+            "x",
+            "y"
+          ],
+          "default": "x",
+          "name": "direction",
+          "type": "ENUM"
+        }
+      ],
+      "outputs": [
+        {
+          "name": "array",
+          "type": "ARRAY"
+        }
+      ]
+    },
+    {
+      "category": [
+        "OpenCV",
+        "Testing"
+      ],
+      "description": "Passes its input through after `seconds`, reporting progress and stopping on cancel. How a long node behaves.",
+      "display": "Slow",
+      "family": "opencv",
+      "id": "opencv.slow",
+      "inputs": [
+        {
+          "name": "array",
+          "socket": "socket",
+          "type": "ARRAY"
+        },
+        {
+          "default": 0.05,
+          "max": 600.0,
+          "min": 0.0,
+          "name": "seconds",
+          "type": "FLOAT"
+        }
+      ],
+      "outputs": [
+        {
+          "name": "array",
+          "type": "ARRAY"
+        }
+      ]
+    },
+    {
+      "category": [
+        "OpenCV",
+        "Filters"
+      ],
+      "description": "First derivative along one direction: signed values on zero.",
+      "display": "Sobel",
+      "family": "opencv",
+      "id": "opencv.sobel",
+      "inputs": [
+        {
+          "name": "picture",
+          "socket": "socket",
+          "type": "ARRAY"
+        },
+        {
+          "choices": [
+            "x",
+            "y"
+          ],
+          "default": "x",
+          "name": "direction",
+          "type": "ENUM"
+        },
+        {
+          "default": 3,
+          "max": 7.0,
+          "min": 1.0,
+          "name": "size",
+          "type": "INT"
+        }
+      ],
+      "outputs": [
+        {
+          "name": "array",
+          "type": "ARRAY"
+        }
+      ]
+    },
+    {
+      "category": [
+        "OpenCV",
+        "Colour"
+      ],
+      "description": "Three channels as three arrays. The inverse of Merge Channels.",
+      "display": "Split Channels",
+      "family": "opencv",
+      "id": "opencv.split",
+      "inputs": [
+        {
+          "name": "picture",
+          "socket": "socket",
+          "type": "ARRAY"
+        }
+      ],
+      "outputs": [
+        {
+          "name": "c1",
+          "type": "ARRAY"
+        },
+        {
+          "name": "c2",
+          "type": "ARRAY"
+        },
+        {
+          "name": "c3",
+          "type": "ARRAY"
+        }
+      ]
+    },
+    {
+      "category": [
+        "OpenCV",
+        "Morphology"
+      ],
+      "description": "The shape Morphology uses, 0 and 1, to look at. Also usable as a mask.",
+      "display": "Structuring Element",
+      "family": "opencv",
+      "id": "opencv.structuring_element",
+      "inputs": [
+        {
+          "choices": [
+            "rectangle",
+            "cross",
+            "ellipse"
+          ],
+          "default": "ellipse",
+          "name": "shape",
+          "type": "ENUM"
+        },
+        {
+          "default": 5,
+          "max": 31.0,
+          "min": 1.0,
+          "name": "size",
+          "tooltip": "Kernel size; an even one becomes the next odd one",
+          "type": "INT"
+        }
+      ],
+      "outputs": [
+        {
+          "name": "array",
+          "type": "ARRAY"
+        }
+      ]
+    },
+    {
+      "category": [
+        "OpenCV",
+        "Photo"
+      ],
+      "description": "A painted look: smooth regions with strong edges.",
+      "display": "Stylization",
+      "family": "opencv",
+      "id": "opencv.stylization",
+      "inputs": [
+        {
+          "name": "picture",
+          "socket": "socket",
+          "type": "ARRAY"
+        },
+        {
+          "default": 60.0,
+          "max": 200.0,
+          "min": 0.0,
+          "name": "sigma_s",
+          "type": "FLOAT"
+        },
+        {
+          "default": 0.45,
+          "max": 1.0,
+          "min": 0.0,
+          "name": "sigma_r",
+          "type": "FLOAT"
+        }
+      ],
+      "outputs": [
+        {
+          "name": "array",
+          "type": "ARRAY"
+        }
+      ]
+    },
+    {
+      "category": [
+        "OpenCV",
+        "Files"
+      ],
+      "description": "A source with no file: a colour gradient, a disc and a bar, with edges for the other nodes to find.",
+      "display": "Test Picture",
+      "family": "opencv",
+      "id": "opencv.test_picture",
+      "inputs": [
+        {
+          "default": 256,
+          "max": 16384.0,
+          "min": 1.0,
+          "name": "width",
+          "type": "INT"
+        },
+        {
+          "default": 192,
+          "max": 16384.0,
+          "min": 1.0,
+          "name": "height",
+          "type": "INT"
+        }
+      ],
+      "outputs": [
+        {
+          "name": "array",
+          "type": "ARRAY"
+        }
+      ]
+    },
+    {
+      "category": [
+        "OpenCV",
+        "Edges"
+      ],
+      "description": "One channel as a mask, 0 or 1. Otsu and triangle find the level themselves, and level is then ignored.",
+      "display": "Threshold",
+      "family": "opencv",
+      "id": "opencv.threshold",
+      "inputs": [
+        {
+          "name": "picture",
+          "socket": "socket",
+          "type": "ARRAY"
+        },
+        {
+          "default": 0.5,
+          "max": 1.0,
+          "min": 0.0,
+          "name": "level",
+          "type": "FLOAT"
+        },
+        {
+          "choices": [
+            "fixed",
+            "otsu",
+            "triangle"
+          ],
+          "default": "fixed",
+          "name": "method",
+          "type": "ENUM"
+        },
+        {
+          "default": false,
+          "name": "invert",
+          "type": "BOOL"
+        }
+      ],
+      "outputs": [
+        {
+          "name": "array",
+          "type": "ARRAY"
+        }
+      ]
+    },
+    {
+      "category": [
+        "OpenCV",
+        "Colour"
+      ],
+      "description": "An RGB picture as one channel of luminance. Colour can't be recovered, so it has no inverse.",
+      "display": "To Grey",
+      "family": "opencv",
+      "id": "opencv.to_grey",
+      "inputs": [
+        {
+          "name": "picture",
+          "socket": "socket",
+          "type": "ARRAY"
+        }
+      ],
+      "outputs": [
+        {
+          "name": "array",
+          "type": "ARRAY"
+        }
+      ]
+    },
+    {
+      "category": [
+        "OpenCV",
+        "Colour"
+      ],
+      "description": "RGB in another colour space, in OpenCV's float units: HSV hue 0-360, Lab L 0-100. The inverse of From Colour Space.",
+      "display": "To Colour Space",
+      "family": "opencv",
+      "id": "opencv.to_space",
+      "inputs": [
+        {
+          "name": "picture",
+          "socket": "socket",
+          "type": "ARRAY"
+        },
+        {
+          "choices": [
+            "HSV",
+            "Lab",
+            "YCrCb"
+          ],
+          "default": "HSV",
+          "name": "space",
+          "type": "ENUM"
+        }
+      ],
+      "outputs": [
+        {
+          "name": "array",
+          "type": "ARRAY"
+        }
+      ]
+    },
+    {
+      "category": [
+        "OpenCV",
+        "Files"
+      ],
+      "description": "One frame of a video file, as RGB, 0-1. Past the end is an op error.",
+      "display": "Video Frame",
+      "family": "opencv",
+      "id": "opencv.video_frame",
+      "inputs": [
+        {
+          "default": "",
+          "name": "path",
+          "path": {
+            "filters": [
+              {
+                "extensions": [
+                  "mp4",
+                  "mov",
+                  "avi",
+                  "mkv",
+                  "webm"
+                ],
+                "name": "Video"
+              }
+            ],
+            "mode": "open"
+          },
+          "type": "STRING"
+        },
+        {
+          "default": 0.0,
+          "max": 86400.0,
+          "min": 0.0,
+          "name": "seconds",
+          "type": "FLOAT"
+        }
+      ],
+      "outputs": [
+        {
+          "name": "array",
+          "type": "ARRAY"
+        }
+      ]
+    },
+    {
+      "category": [
+        "OpenCV",
+        "Geometry"
+      ],
+      "description": "Rotate about the centre, scale and shift, keeping the size; the corners repeat the edge. The opposite angle undoes the rotation, softened.",
+      "display": "Warp Affine",
+      "family": "opencv",
+      "id": "opencv.warp_affine",
+      "inputs": [
+        {
+          "name": "picture",
+          "socket": "socket",
+          "type": "ARRAY"
+        },
+        {
+          "default": 15.0,
+          "max": 360.0,
+          "min": -360.0,
+          "name": "angle",
+          "type": "FLOAT"
+        },
+        {
+          "default": 1.0,
+          "max": 100.0,
+          "min": 0.01,
+          "name": "scale",
+          "type": "FLOAT"
+        },
+        {
+          "default": 0.0,
+          "max": 16384.0,
+          "min": -16384.0,
+          "name": "shift_x",
+          "type": "FLOAT"
+        },
+        {
+          "default": 0.0,
+          "max": 16384.0,
+          "min": -16384.0,
+          "name": "shift_y",
+          "type": "FLOAT"
+        }
+      ],
+      "outputs": [
+        {
+          "name": "array",
+          "type": "ARRAY"
+        }
+      ]
+    },
+    {
+      "category": [
+        "OpenCV",
+        "Segmentation"
+      ],
+      "description": "Grow labelled seeds across a picture until they meet: integer labels, with -1 on the boundaries.",
+      "display": "Watershed",
+      "family": "opencv",
+      "id": "opencv.watershed",
+      "inputs": [
+        {
+          "name": "picture",
+          "socket": "socket",
+          "type": "ARRAY"
+        },
+        {
+          "name": "markers",
+          "socket": "socket",
+          "tooltip": "Integer labels, from Connected Components: each seed grows; 0 is unknown",
+          "type": "ARRAY"
+        }
+      ],
+      "outputs": [
+        {
+          "name": "array",
+          "type": "ARRAY"
+        }
+      ]
+    },
+    {
+      "category": [
+        "Building blocks",
+        "Sequences"
+      ],
+      "description": "Every combination of the items of a, b (and c), as one list of tuples, the first varying slowest. A single value goes with every item. Unzip splits the tuples again.",
+      "display": "Outer Join",
+      "flags": {
+        "input_list": true
+      },
+      "id": "seq.outer",
+      "inputs": [
+        {
+          "name": "a",
+          "socket": "socket",
+          "tooltip": "A sequence, or a single value",
+          "type": "ANY"
+        },
+        {
+          "name": "b",
+          "socket": "socket",
+          "tooltip": "A sequence, or a single value",
+          "type": "ANY"
+        },
+        {
+          "name": "c",
+          "optional": true,
+          "socket": "socket",
+          "tooltip": "A third sequence (optional)",
+          "type": "ANY"
+        }
+      ],
+      "outputs": [
+        {
+          "list": true,
+          "name": "tuples",
+          "socket": "socket",
+          "type": "ANY"
+        }
+      ]
+    },
+    {
+      "category": [
+        "Building blocks",
+        "Sequences"
+      ],
+      "description": "Rows of values (a spreadsheet's Read range, or Table to Rows) as a table of named columns, the first row the names (without a header, c1, c2, \u2026). A column is INT, FLOAT or BOOL when every value is one, else STRING. Table to Rows goes the other way.",
+      "display": "Rows to Table",
+      "id": "seq.rows_table",
+      "inputs": [
+        {
+          "name": "rows",
+          "socket": "socket",
+          "tooltip": "Rows: a list of lists",
+          "type": "ANY"
+        },
+        {
+          "default": true,
+          "name": "header",
+          "tooltip": "The first row holds the column names",
+          "type": "BOOL"
+        }
+      ],
+      "outputs": [
+        {
+          "name": "table",
+          "socket": "socket",
+          "type": "ANY"
+        }
+      ]
+    },
+    {
+      "category": [
+        "Building blocks",
+        "Sequences"
+      ],
+      "description": "A table (named columns, as Letter counts or Transients make it, or a 2-D table array, as Histogram makes it) as rows of values, the column names first: what a spreadsheet's Write range takes. Rows already in rows pass through.",
+      "display": "Table to Rows",
+      "id": "seq.table_rows",
+      "inputs": [
+        {
+          "name": "table",
+          "socket": "socket",
+          "tooltip": "A table: {\"columns\": [{name, values}]}",
+          "type": "ANY"
+        },
+        {
+          "default": true,
+          "name": "header",
+          "tooltip": "Put the column names first",
+          "type": "BOOL"
+        }
+      ],
+      "outputs": [
+        {
+          "name": "rows",
+          "socket": "socket",
+          "type": "ANY"
+        }
+      ]
+    },
+    {
+      "category": [
+        "Building blocks",
+        "Sequences"
+      ],
+      "description": "A list of tuples (from Zip, Outer Join or Vary Range 2D's xy) split into its parts: a, b and c are lists that zip downstream, so the settings they feed vary together. A single tuple splits into single values.",
+      "display": "Unzip",
+      "flags": {
+        "input_list": true
+      },
+      "id": "seq.unzip",
+      "inputs": [
+        {
+          "name": "tuples",
+          "socket": "socket",
+          "tooltip": "A list of tuples, or one tuple",
+          "type": "ANY"
+        }
+      ],
+      "outputs": [
+        {
+          "list": true,
+          "name": "a",
+          "socket": "socket",
+          "type": "ANY"
+        },
+        {
+          "list": true,
+          "name": "b",
+          "socket": "socket",
+          "type": "ANY"
+        },
+        {
+          "list": true,
+          "name": "c",
+          "socket": "socket",
+          "type": "ANY"
+        }
+      ]
+    },
+    {
+      "category": [
+        "Building blocks",
+        "Sequences"
+      ],
+      "description": "The items of a, b (and c) paired up in order, as one list of tuples: (a1, b1), (a2, b2), \u2026 The lists must be the same length; a single value goes with every item. Unzip splits the tuples again.",
+      "display": "Zip",
+      "flags": {
+        "input_list": true
+      },
+      "id": "seq.zip",
+      "inputs": [
+        {
+          "name": "a",
+          "socket": "socket",
+          "tooltip": "A sequence, or a single value",
+          "type": "ANY"
+        },
+        {
+          "name": "b",
+          "socket": "socket",
+          "tooltip": "A sequence, or a single value",
+          "type": "ANY"
+        },
+        {
+          "name": "c",
+          "optional": true,
+          "socket": "socket",
+          "tooltip": "A third sequence (optional)",
+          "type": "ANY"
+        }
+      ],
+      "outputs": [
+        {
+          "list": true,
+          "name": "tuples",
+          "socket": "socket",
+          "type": "ANY"
+        }
+      ]
+    },
+    {
+      "category": [
+        "Building blocks",
+        "Vary"
+      ],
+      "description": "A list of on/off values to sweep a setting with: wire it into a parameter and that node runs once per value, each result labelled with its value. Several varied settings zip when they come from the same Vary node, and form every combination when they don't.",
+      "display": "Vary Bool",
+      "id": "vary.bool",
+      "inputs": [
+        {
+          "default": "false, true",
+          "name": "values",
+          "tooltip": "The values, comma-separated; true/false, yes/no, on/off or 1/0",
+          "type": "STRING"
+        }
+      ],
+      "outputs": [
+        {
+          "list": true,
+          "name": "values",
+          "socket": "socket",
+          "type": "BOOL"
+        }
+      ]
+    },
+    {
+      "category": [
+        "Building blocks",
+        "Vary"
+      ],
+      "description": "Every choice of the ENUM setting this is wired into (blank), or a comma-separated subset of them: that node runs once per choice, each result labelled with its choice. The choices come from the input it feeds, so nothing needs typing.",
+      "display": "Vary Choices",
+      "flags": {
+        "vary_choices": true
+      },
+      "id": "vary.choices",
+      "inputs": [
+        {
+          "default": "",
+          "name": "values",
+          "tooltip": "Blank: every choice the wired input offers. Or some of them, comma-separated, as the dropdown spells them",
+          "type": "STRING"
+        }
+      ],
+      "outputs": [
+        {
+          "list": true,
+          "name": "values",
+          "socket": "socket",
+          "type": "STRING"
+        }
+      ]
+    },
+    {
+      "category": [
+        "Building blocks",
+        "Vary"
+      ],
+      "description": "A list of numbers to sweep a setting with: wire it into a parameter and that node runs once per value, each result labelled with its value. Several varied settings zip when they come from the same Vary node, and form every combination when they don't.",
+      "display": "Vary Float",
+      "id": "vary.float",
+      "inputs": [
+        {
+          "default": "0.5, 1, 2",
+          "name": "values",
+          "tooltip": "The values, comma-separated; a range as start:stop:step (stop included when the steps land on it; step 1 if left out) or start:stop/count (count values, evenly spaced, both ends included)",
+          "type": "STRING"
+        }
+      ],
+      "outputs": [
+        {
+          "list": true,
+          "name": "values",
+          "socket": "socket",
+          "type": "FLOAT"
+        }
+      ]
+    },
+    {
+      "category": [
+        "Building blocks",
+        "Vary"
+      ],
+      "description": "A list of whole numbers to sweep a setting with: wire it into a parameter and that node runs once per value, each result labelled with its value. Several varied settings zip when they come from the same Vary node, and form every combination when they don't.",
+      "display": "Vary Int",
+      "id": "vary.int",
+      "inputs": [
+        {
+          "default": "1, 2, 3",
+          "name": "values",
+          "tooltip": "The values, comma-separated; a range as start:stop:step (stop included when the steps land on it; step 1 if left out) or start:stop/count (count values, evenly spaced, both ends included)",
+          "type": "STRING"
+        }
+      ],
+      "outputs": [
+        {
+          "list": true,
+          "name": "values",
+          "socket": "socket",
+          "type": "INT"
+        }
+      ]
+    },
+    {
+      "category": [
+        "Building blocks",
+        "Vary"
+      ],
+      "description": "num numbers evenly spaced from start to stop (stop included unless endpoint is off), as numpy's linspace. Wire it into a parameter, such as a width, to run that node once per value.",
+      "display": "Vary Range",
+      "id": "vary.range",
+      "inputs": [
+        {
+          "default": 1.0,
+          "label": "start",
+          "name": "start",
+          "step": 0.1,
+          "tooltip": "The first value",
+          "type": "FLOAT"
+        },
+        {
+          "default": 3.0,
+          "label": "stop",
+          "name": "stop",
+          "step": 0.1,
+          "tooltip": "The last value (included unless endpoint is off)",
+          "type": "FLOAT"
+        },
+        {
+          "default": 5,
+          "max": 1000.0,
+          "min": 1.0,
+          "name": "num",
+          "step": 1.0,
+          "tooltip": "How many values",
+          "type": "INT"
+        },
+        {
+          "default": true,
+          "name": "endpoint",
+          "tooltip": "Include the stop value",
+          "type": "BOOL"
+        }
+      ],
+      "outputs": [
+        {
+          "list": true,
+          "name": "values",
+          "socket": "socket",
+          "type": "FLOAT"
+        }
+      ]
+    },
+    {
+      "category": [
+        "Building blocks",
+        "Vary"
+      ],
+      "description": "num points evenly spaced from the start point to the stop point (numpy's linspace between two points): their x, y on outputs that zip, so the settings they feed vary together, and the points as tuples on xy. With grid on, every combination of num values per coordinate instead (num \u00d7 num points), x varying fastest.",
+      "display": "Vary Range 2D",
+      "id": "vary.range2d",
+      "inputs": [
+        {
+          "default": 0.0,
+          "label": "start x",
+          "name": "start_x",
+          "step": 0.1,
+          "tooltip": "x at the first point",
+          "type": "FLOAT"
+        },
+        {
+          "default": 1.0,
+          "label": "stop x",
+          "name": "stop_x",
+          "step": 0.1,
+          "tooltip": "x at the last point",
+          "type": "FLOAT"
+        },
+        {
+          "default": 0.0,
+          "label": "start y",
+          "name": "start_y",
+          "step": 0.1,
+          "tooltip": "y at the first point",
+          "type": "FLOAT"
+        },
+        {
+          "default": 1.0,
+          "label": "stop y",
+          "name": "stop_y",
+          "step": 0.1,
+          "tooltip": "y at the last point",
+          "type": "FLOAT"
+        },
+        {
+          "default": 5,
+          "max": 1000.0,
+          "min": 1.0,
+          "name": "num",
+          "step": 1.0,
+          "tooltip": "How many points (with grid on: how many values per coordinate)",
+          "type": "INT"
+        },
+        {
+          "default": true,
+          "name": "endpoint",
+          "tooltip": "Include the stop value",
+          "type": "BOOL"
+        },
+        {
+          "default": false,
+          "name": "grid",
+          "tooltip": "Every combination of the coordinates' values, not points along a line",
+          "type": "BOOL"
+        }
+      ],
+      "outputs": [
+        {
+          "list": true,
+          "name": "x",
+          "socket": "socket",
+          "type": "FLOAT"
+        },
+        {
+          "list": true,
+          "name": "y",
+          "socket": "socket",
+          "type": "FLOAT"
+        },
+        {
+          "list": true,
+          "name": "xy",
+          "socket": "socket",
+          "type": "ANY"
+        }
+      ]
+    },
+    {
+      "category": [
+        "Building blocks",
+        "Vary"
+      ],
+      "description": "num points evenly spaced from the start point to the stop point (numpy's linspace between two points): their x, y, z on outputs that zip, so the settings they feed vary together, and the points as tuples on xyz. With grid on, every combination of num values per coordinate instead (num \u00d7 num \u00d7 num points), x varying fastest.",
+      "display": "Vary Range 3D",
+      "id": "vary.range3d",
+      "inputs": [
+        {
+          "default": 0.0,
+          "label": "start x",
+          "name": "start_x",
+          "step": 0.1,
+          "tooltip": "x at the first point",
+          "type": "FLOAT"
+        },
+        {
+          "default": 1.0,
+          "label": "stop x",
+          "name": "stop_x",
+          "step": 0.1,
+          "tooltip": "x at the last point",
+          "type": "FLOAT"
+        },
+        {
+          "default": 0.0,
+          "label": "start y",
+          "name": "start_y",
+          "step": 0.1,
+          "tooltip": "y at the first point",
+          "type": "FLOAT"
+        },
+        {
+          "default": 1.0,
+          "label": "stop y",
+          "name": "stop_y",
+          "step": 0.1,
+          "tooltip": "y at the last point",
+          "type": "FLOAT"
+        },
+        {
+          "default": 0.0,
+          "label": "start z",
+          "name": "start_z",
+          "step": 0.1,
+          "tooltip": "z at the first point",
+          "type": "FLOAT"
+        },
+        {
+          "default": 1.0,
+          "label": "stop z",
+          "name": "stop_z",
+          "step": 0.1,
+          "tooltip": "z at the last point",
+          "type": "FLOAT"
+        },
+        {
+          "default": 5,
+          "max": 1000.0,
+          "min": 1.0,
+          "name": "num",
+          "step": 1.0,
+          "tooltip": "How many points (with grid on: how many values per coordinate)",
+          "type": "INT"
+        },
+        {
+          "default": true,
+          "name": "endpoint",
+          "tooltip": "Include the stop value",
+          "type": "BOOL"
+        },
+        {
+          "default": false,
+          "name": "grid",
+          "tooltip": "Every combination of the coordinates' values, not points along a line",
+          "type": "BOOL"
+        }
+      ],
+      "outputs": [
+        {
+          "list": true,
+          "name": "x",
+          "socket": "socket",
+          "type": "FLOAT"
+        },
+        {
+          "list": true,
+          "name": "y",
+          "socket": "socket",
+          "type": "FLOAT"
+        },
+        {
+          "list": true,
+          "name": "z",
+          "socket": "socket",
+          "type": "FLOAT"
+        },
+        {
+          "list": true,
+          "name": "xyz",
+          "socket": "socket",
+          "type": "ANY"
+        }
+      ]
+    },
+    {
+      "category": [
+        "Building blocks",
+        "Vary"
+      ],
+      "description": "A list of texts to sweep a setting with: wire it into a parameter and that node runs once per value, each result labelled with its value. Several varied settings zip when they come from the same Vary node, and form every combination when they don't.",
+      "display": "Vary String",
+      "id": "vary.string",
+      "inputs": [
+        {
+          "default": "a, b",
+          "name": "values",
+          "tooltip": "The values, comma-separated; each item as typed",
+          "type": "STRING"
+        }
+      ],
+      "outputs": [
+        {
+          "list": true,
+          "name": "values",
+          "socket": "socket",
+          "type": "STRING"
+        }
+      ]
+    }
+  ],
+  "wire_types": [
+    {
+      "id": "INT",
+      "media": "scalar"
+    },
+    {
+      "color": "#8a5cc2",
+      "default_view": "auto",
+      "id": "ARRAY",
+      "media": "ndarray",
+      "thumb": true,
+      "view_params": {
+        "angle": [
+          {
+            "default": 1.0,
+            "label": null,
+            "name": "turn",
+            "tooltip": "One full turn in the array's units (1 for turns, 360 for degrees, 6.283 for radians)",
+            "type": "FLOAT"
+          }
+        ]
+      },
+      "views": [
+        "auto",
+        "color",
+        "stretch",
+        "clip",
+        "heat",
+        "labels",
+        "angle"
+      ]
+    },
+    {
+      "id": "STRING",
+      "media": "scalar"
+    },
+    {
+      "id": "ENUM",
+      "media": "scalar"
+    },
+    {
+      "color": "#2563eb",
+      "id": "IMAGE",
+      "media": "image",
+      "thumb": true
+    },
+    {
+      "id": "FLOAT",
+      "media": "scalar"
+    },
+    {
+      "id": "BOOL",
+      "media": "scalar"
+    },
+    {
+      "color": "#4f86c6",
+      "id": "TABLE",
+      "media": "table"
+    },
+    {
+      "color": "#9ca3af",
+      "id": "ANY",
+      "media": "bytes"
+    }
+  ]
+}

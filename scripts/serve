@@ -1,0 +1,9 @@
+#!/usr/bin/env bash
+# Serve the engine over HTTP for Engine › Attach and scripts/run --attach.
+#   scripts/serve [PORT]
+# Loopback needs no token; PLUMCRAFT_ENGINE_TOKEN is passed through when set.
+set -euo pipefail
+cd "$(dirname "$0")/.."
+port=${1:-7311}
+echo "attach to http://127.0.0.1:$port"
+exec uv run python -m opencv_engine --listen "127.0.0.1:$port"
