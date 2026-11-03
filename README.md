@@ -7,6 +7,17 @@ A [PlumCraft](https://github.com/seantrue/plumcraft) engine on OpenCV: filters, 
 - **Run it as a process,** as `plumcraft-engine.toml` does. A `cv2.error` is an error on that node; a crash in OpenCV's C++ can't be caught, and the host restarts the engine.
 
 
+## Install
+
+You need PlumCraft: the editor from its [installers](https://github.com/seantrue/plumcraft/releases), or `cargo install plumcraft plumcraft-editor`. Then:
+
+```sh
+uv tool install git+https://github.com/seantrue/plumcraft-opencv-engine   # or pipx install git+…
+opencv-engine register                                        # every PlumCraft editor now offers it
+```
+
+`opencv-engine register` writes `~/.config/plumcraft/engines/opencv.toml`, which starts the engine with the Python it was installed with. A running editor offers it after Engine › Reload Engine List. `opencv-engine unregister` withdraws it.
+
 ## The first five minutes
 
 ```sh
@@ -86,8 +97,12 @@ The PlumCraft SDK's `python/README.md` lists every annotation.
 
 ## The SDK
 
-`pyproject.toml` takes the SDK from `[tool.uv.sources]`. A path follows the PlumCraft checkout, so the engine always runs the SDK the editor was built with; on another machine, edit the path, or use a pinned commit:
+`pyproject.toml` pins the PlumCraft SDK to a commit of PlumCraft's `headless-write-files` branch, which has what this engine needs (`register`, among others), until `plumcraft-engine` has a release with it. To work against a PlumCraft checkout instead, point the source at it:
 
 ```toml
-plumcraft-engine = { git = "ssh://git@github.com/seantrue/plumcraft", subdirectory = "python", rev = "<commit>" }
+plumcraft-engine = { path = "../plumcraft/python", editable = true }
 ```
+
+## Licence
+
+MIT or Apache 2.0, at your option: `LICENSE-MIT`, `LICENSE-APACHE`. As PlumCraft.
